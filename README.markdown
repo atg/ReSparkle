@@ -1,7 +1,7 @@
 # ReSparkle
 ReSparkle is a set of changes to the UX of Sparkle to make it easier to use and less irritating.
 
-Sparkle normally prompts users to install updates when the app is first launched. Unfortunately, this means it ends up prompting *just* after a document has been opened - this can be quite distracting. To fix this, ReSparkle downloads updates in the background, and only prompts the user to install updates when quitting the app.
+Sparkle normally prompts users to install updates when the app has just launched. Unfortunately, this means it ends up prompting *just* after a document has been opened - this can be quite distracting. To fix this, ReSparkle downloads updates in the background, and only prompts the user to install updates when quitting the app.
 
 ![](http://www.fileability.net/snaps/updating.png)
 
