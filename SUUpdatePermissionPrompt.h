@@ -16,6 +16,11 @@ typedef enum {
 	SUDoNotAutomaticallyCheck
 } SUPermissionPromptResult;
 
+typedef enum {
+	SUAutomaticallyDownload,
+	SUDoNotAutomaticallyDownload
+} SUDownloadPermissionPromptResult;
+
 @class SUHost;
 @interface SUUpdatePermissionPrompt : SUWindowController {
 	SUHost *host;
@@ -32,7 +37,13 @@ typedef enum {
 @end
 
 @interface NSObject (SUUpdatePermissionPromptDelegateInformalProtocol)
+
+//Unused in ReSparkle
 - (void)updatePermissionPromptFinishedWithResult:(SUPermissionPromptResult)result;
+
+//ReSparkle only
+- (void)downloadPermissionPromptFinishedWithResult:(SUDownloadPermissionPromptResult)result;
+
 @end
 
 #endif

@@ -127,7 +127,7 @@
 	SInt32 gestaltInfo;
 	OSErr err = Gestalt(gestaltProcClkSpeedMHz,&gestaltInfo);
 	if (err == noErr)
-		[profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"cpuFreqMHz",@"CPU Speed (GHz)", [NSNumber numberWithInt:gestaltInfo], [NSNumber numberWithDouble:gestaltInfo/1000.0],nil] forKeys:profileDictKeys]];
+		[profileArray addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"cpuFreqMHz",@"CPU Speed (GHz)", [NSNumber numberWithInt:gestaltInfo], [NSString stringWithFormat:@"%.2lf", gestaltInfo/1000.0],nil] forKeys:profileDictKeys]];
 	
 	// amount of RAM
 	err = Gestalt(gestaltPhysicalRAMSizeInMegabytes,&gestaltInfo);

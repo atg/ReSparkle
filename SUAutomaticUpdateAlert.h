@@ -26,9 +26,15 @@ typedef enum
 }
 
 - (id)initWithAppcastItem:(SUAppcastItem *)item host:(SUHost *)hostBundle delegate:delegate;
+
+- (IBAction)viewReleaseNotes:(id)sender;
+
 - (IBAction)installNow:sender;
 - (IBAction)installLater:sender;
 - (IBAction)doNotInstall:sender;
+
+- (NSString *)titleText;
+- (NSString *)descriptionText;
 
 @end
 

@@ -69,7 +69,7 @@
 
 - (NSString *)promptDescription
 {
-	return [NSString stringWithFormat:SULocalizedString(@"Should %1$@ automatically check for updates? You can always check for updates manually from the %1$@ menu.", nil), [host name]];
+	return [NSString stringWithFormat:SULocalizedString(@"%1$@ can automatically download updates in the background. Do you want it to ask permission before downloading?", nil), [host name]];
 }
 
 - (IBAction)toggleMoreInfo:(id)sender
@@ -90,7 +90,7 @@
 	{
 		// Add the subview
 		contentViewFrame.size.height += profileMoreInfoViewFrame.size.height;
-		profileMoreInfoViewFrame.origin.y = profileMoreInfoButtonFrame.origin.y - profileMoreInfoViewFrame.size.height;
+		profileMoreInfoViewFrame.origin.y = profileMoreInfoButtonFrame.origin.y - 2 - profileMoreInfoViewFrame.size.height;
 		profileMoreInfoViewFrame.origin.x = descriptionFrame.origin.x;
 		profileMoreInfoViewFrame.size.width = descriptionFrame.size.width;
 		
@@ -119,13 +119,15 @@
 
 - (IBAction)finishPrompt:(id)sender
 {
-	if (![delegate respondsToSelector:@selector(updatePermissionPromptFinishedWithResult:)])
-		[NSException raise:@"SUInvalidDelegate" format:@"SUUpdatePermissionPrompt's delegate (%@) doesn't respond to updatePermissionPromptFinishedWithResult:!", delegate];
+	if (![delegate respondsToSelector:@selector(downloadPermissionPromptFinishedWithResult:)])
+		[NSException raise:@"SUInvalidDelegate" format:@"SUUpdatePermissionPrompt's delegate (%@) doesn't respond to downloadPermissionPromptFinishedWithResult:!", delegate];
 	[host setBool:shouldSendProfile forUserDefaultsKey:SUSendProfileInfoKey];
-	[delegate updatePermissionPromptFinishedWithResult:([sender tag] == 1 ? SUAutomaticallyCheck : SUDoNotAutomaticallyCheck)];
+	[delegate downloadPermissionPromptFinishedWithResult:([sender tag] == 1 ? SUAutomaticallyDownload : SUDoNotAutomaticallyDownload)];
 	[[self window] close];
 	[NSApp stopModal];
-	[self autorelease];
+	
+	//FIXME: This crashes but presumably doesn't in the official release. What's wrong?
+	//[self autorelease];
 }
 
 @end

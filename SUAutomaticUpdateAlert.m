@@ -35,22 +35,27 @@
 
 - (NSString *)description { return [NSString stringWithFormat:@"%@ <%@>", [self class], [host bundlePath]]; }
 
+- (IBAction)viewReleaseNotes:(id)sender
+{
+	//FIXME: Show release notes
+}
+
 - (IBAction)installNow:sender
 {
-	[self close];
 	[delegate automaticUpdateAlert:self finishedWithChoice:SUInstallNowChoice];
+	[self close];
 }
 
 - (IBAction)installLater:sender
 {
-	[self close];
 	[delegate automaticUpdateAlert:self finishedWithChoice:SUInstallLaterChoice];
+	[self close];
 }
 
 - (IBAction)doNotInstall:sender
 {
-	[self close];
 	[delegate automaticUpdateAlert:self finishedWithChoice:SUDoNotInstallChoice];
+	[self close];
 }
 
 - (NSImage *)applicationIcon
@@ -65,7 +70,11 @@
 
 - (NSString *)descriptionText
 {
+	//New ReSparkle text
 	return [NSString stringWithFormat:SULocalizedString(@"%1$@ %2$@ has been downloaded and is ready to use! Would you like to install it and relaunch %1$@ now?", nil), [host name], [updateItem displayVersionString]];
+	
+	//Old Sparkle text
+	//return [NSString stringWithFormat:SULocalizedString(@"%1$@ %2$@ has been downloaded and is ready to use! Would you like to install it and relaunch %1$@ now?", nil), [host name], [updateItem displayVersionString]];
 }
 
 @end

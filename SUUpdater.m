@@ -131,9 +131,19 @@ static NSString * const SUUpdaterDefaultsObservationContext = @"SUUpdaterDefault
     }
 }
 
+//Unused in ReSparkle
 - (void)updatePermissionPromptFinishedWithResult:(SUPermissionPromptResult)result
 {
 	[self setAutomaticallyChecksForUpdates:(result == SUAutomaticallyCheck)];
+    // Schedule checks, but make sure we ignore the delayed call from KVO
+	[self resetUpdateCycle];
+}
+
+//ReSparkle only
+- (void)downloadPermissionPromptFinishedWithResult:(SUDownloadPermissionPromptResult)result
+{
+	[self setAutomaticallyChecksForUpdates:YES];
+	[self setAutomaticallyDownloadsUpdates:(result == SUAutomaticallyDownload)];
     // Schedule checks, but make sure we ignore the delayed call from KVO
 	[self resetUpdateCycle];
 }
