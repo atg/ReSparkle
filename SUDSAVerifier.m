@@ -107,8 +107,14 @@ static EVP_PKEY* load_dsa_key(char *key)
 
 @implementation SUDSAVerifier
 
+
 + (BOOL)validatePath:(NSString *)path withEncodedDSASignature:(NSString *)encodedSignature withPublicDSAKey:(NSString *)pkeyString
 {
+#ifdef IGNORE_DSA_SIGNING
+	//If this has been built without dsa signatures, short circuit it here
+	return YES;
+#endif
+	
 	BOOL result = NO;
 	if (!encodedSignature) { return NO; }
 	if (!pkeyString) { return NO; }
