@@ -15,7 +15,6 @@
 
 - (void)unarchiverDidFinish:(SUUnarchiver *)ua
 {
-	NSLog(@"Unarchiver did finish");
 	alert = [[SUAutomaticUpdateAlert alloc] initWithAppcastItem:updateItem host:host delegate:self];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
@@ -36,14 +35,8 @@
 		case SUInstallNowChoice:
 			[self installUpdate];
 			break;
-			
-		case SUInstallLaterChoice:
-			postponingInstallation = YES;
-			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
-			break;
-
+		
 		case SUDoNotInstallChoice:
-			//[host setObject:[updateItem versionString] forUserDefaultsKey:SUSkippedVersionKey];
 			[self abortUpdate];
 			break;
 	}
@@ -51,10 +44,8 @@
 
 - (BOOL)shouldInstallSynchronously
 {
-	//We now always install on quit so return YES
+	//We now only install on quit so return YES
 	return YES;
-	
-	//return postponingInstallation;
 }
 
 - (void)installUpdate
@@ -71,60 +62,17 @@
 	
 	if ([host isBackgroundApplication])
 	{
-	//	[[alert window] setHidesOnDeactivate:NO];
 		[NSApp activateIgnoringOtherApps:YES];
 	}		
 	
-	//if ([NSApp isActive])
-	//	[[alert window] makeKeyAndOrderFront:self];
-	//else
-	//	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:NSApplicationDidBecomeActiveNotification object:NSApp];
-	
-	/*
-	NSAlert *prompt = [[NSAlert alloc] init];
-	[prompt setMessageText:[alert titleText]];
-	[prompt setInformativeText:[alert descriptionText]];
-	
-	[prompt addButtonWithTitle:@"Install"];
-	[prompt addButtonWithTitle:@"Don't Install"];
-	[prompt addButtonWithTitle:@"Release Notes"];
-	
-	NSInteger response = [prompt runModal];
-	if (response == NSAlertFirstButtonReturn)
-	{
-		//Install
-		
-		
-	}
-	else if (response == NSAlertSecondButtonReturn)
-	{
-		//Don't Install
-		
-		
-	}
-	else if (response == NSAlertSecondButtonReturn)
-	{
-		//Don't Install
-		
-		
-	}
-	
-	*/
 	[[alert window] makeKeyAndOrderFront:self];
 	[NSApp runModalForWindow:[alert window]];
-	
-	
-	//[self installUpdate];
 }
 
 - (void)installerFinishedForHost:(SUHost *)aHost
 {
 	//Don't relaunch as this will be triggered on quit
 	return;
-	
-	if (aHost != host) { return; }
-	if (!postponingInstallation)
-		[self relaunchHostApp];
 }
 
 - (void)abortUpdateWithError:(NSError *)error
