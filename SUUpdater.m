@@ -15,6 +15,7 @@
 #import "SUProbingUpdateDriver.h"
 #import "SUUserInitiatedUpdateDriver.h"
 #import "SUScheduledUpdateDriver.h"
+#import "SUDSAVerifier.h"
 
 @interface SUUpdater (Private)
 - initForBundle:(NSBundle *)bundle;
@@ -70,10 +71,11 @@ static NSString * const SUUpdaterDefaultsObservationContext = @"SUUpdaterDefault
         host = [[SUHost alloc] initWithBundle:bundle];
         [self registerAsObserver];
 		
+#ifndef IGNORE_DSA_SIGNING
 		// Saving-the-developer-from-a-stupid-mistake-check:
 		if (![[[self feedURL] scheme] isEqualToString:@"https"] && ![host publicDSAKey])
 			NSRunAlertPanel(@"Insecure update error!", @"For security reasons, you need to distribute your appcast over SSL or sign your updates. See Sparkle's documentation for more information.", @"OK", nil, nil);
-		
+#endif
         // This runs the permission prompt if needed, but never before the app has finished launching because the runloop won't run before that
         [self performSelector:@selector(startUpdateCycle) withObject:nil afterDelay:0];
 	}
