@@ -11,6 +11,8 @@
 
 #import "SUWindowController.h"
 
+@class SUReleaseNotesViewController;
+
 typedef enum
 {
 	SUInstallUpdateChoice,
@@ -24,6 +26,7 @@ typedef enum
 	SUHost *host;
 	id delegate;
 	
+	SUReleaseNotesViewController *releaseNotesViewController;
 	IBOutlet WebView *releaseNotesView;
 	IBOutlet NSTextField *description;
 	NSProgressIndicator *releaseNotesSpinner;

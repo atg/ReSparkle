@@ -15,6 +15,7 @@
 
 - (void)unarchiverDidFinish:(SUUnarchiver *)ua
 {
+	NSLog(@"Sparkle update did unarchive");
 	alert = [[SUAutomaticUpdateAlert alloc] initWithAppcastItem:updateItem host:host delegate:self];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
@@ -63,10 +64,23 @@
 	if ([host isBackgroundApplication])
 	{
 		[NSApp activateIgnoringOtherApps:YES];
-	}		
+	}
 	
-	[[alert window] makeKeyAndOrderFront:self];
-	[NSApp runModalForWindow:[alert window]];
+	NSModalSession session = [NSApp beginModalSessionForWindow:[alert window]];
+    NSInteger result = NSRunContinuesResponse;
+    
+	//To run the release notes WebView modally we need to use modal sessions. From http://www.dejal.com/blog/2007/01/cocoa-topics-case-modal-webview
+    //Loop until some result other than continues:
+    while (result == NSRunContinuesResponse)
+    {
+        //Run the window modally until there are no events to process:
+        result = [NSApp runModalSession:session];
+        
+        //Give the main loop some time:
+        [[NSRunLoop currentRunLoop] limitDateForMode:NSDefaultRunLoopMode];
+    }
+    
+    [NSApp endModalSession:session];
 }
 
 - (void)installerFinishedForHost:(SUHost *)aHost

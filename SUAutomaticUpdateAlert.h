@@ -9,20 +9,32 @@
 #ifndef SUAUTOMATICUPDATEALERT_H
 #define SUAUTOMATICUPDATEALERT_H
 
+#import <WebKit/WebKit.h>
 #import "SUWindowController.h"
 
 typedef enum
 {
 	SUInstallNowChoice,
-	SUInstallLaterChoice,
 	SUDoNotInstallChoice
 } SUAutomaticInstallationChoice;
 
-@class SUAppcastItem, SUHost;
-@interface SUAutomaticUpdateAlert : SUWindowController {
+@class SUAppcastItem, SUHost, SUReleaseNotesViewController;
+@interface SUAutomaticUpdateAlert : SUWindowController
+{
+	SUReleaseNotesViewController *releaseNotesViewController;
+	
+	IBOutlet NSView *releaseNotesEnclosure;
+	IBOutlet NSBox *releaseNotesBox;
+	IBOutlet WebView *releaseNotesWebView;
+	
+	IBOutlet NSButton *autoDownloadUpdatesCheckBox;
+	
 	SUAppcastItem *updateItem;
 	id delegate;
 	SUHost *host;
+	
+	NSRect hiddenReleaseNotesWindowFrame;
+	BOOL isShowingReleaseNotes;
 }
 
 - (id)initWithAppcastItem:(SUAppcastItem *)item host:(SUHost *)hostBundle delegate:delegate;
@@ -30,7 +42,6 @@ typedef enum
 - (IBAction)viewReleaseNotes:(id)sender;
 
 - (IBAction)installNow:sender;
-- (IBAction)installLater:sender;
 - (IBAction)doNotInstall:sender;
 
 - (NSString *)titleText;
