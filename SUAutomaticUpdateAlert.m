@@ -57,11 +57,11 @@
 
 - (IBAction)viewReleaseNotes:(id)sender
 {
-	const CGFloat leftMargin = 108.0;
-	const CGFloat betweenCheckboxWebViewMargin = 12.0;
-	const CGFloat rightMargin = 20.0;
+	const float leftMargin = 108.0f;
+	const float betweenCheckboxWebViewMargin = 12.0f;
+	const float rightMargin = 20.0f;
 	
-	CGFloat increase = [releaseNotesEnclosure frame].size.height + betweenCheckboxWebViewMargin;
+	float increase = (float)([releaseNotesEnclosure frame].size.height) + betweenCheckboxWebViewMargin;
 	if (isShowingReleaseNotes)
 	{
 		//Hide the release notes
