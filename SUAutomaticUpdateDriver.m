@@ -66,18 +66,21 @@
 		[NSApp activateIgnoringOtherApps:YES];
 	}
 	
+	//[NSApp runModalForWindow:[alert window]]; 
+	
+	 	
+	 //To run the release notes WebView modally we need to use modal sessions. From http://www.dejal.com/blog/2007/01/cocoa-topics-case-modal-webview
+	 //Loop until some result other than continues:
+	
 	NSModalSession session = [NSApp beginModalSessionForWindow:[alert window]];
-    NSInteger result = NSRunContinuesResponse;
     
-	//To run the release notes WebView modally we need to use modal sessions. From http://www.dejal.com/blog/2007/01/cocoa-topics-case-modal-webview
-    //Loop until some result other than continues:
-    while (result == NSRunContinuesResponse)
+	NSRunLoop *runloop = [NSRunLoop currentRunLoop];
+	
+	while ([NSApp runModalSession:session] == NSRunContinuesResponse)
     {
-        //Run the window modally until there are no events to process:
-        result = [NSApp runModalSession:session];
-        
-        //Give the main loop some time:
-        [[NSRunLoop currentRunLoop] limitDateForMode:NSDefaultRunLoopMode];
+        //Run the window modally until there are no events to process:		
+		NSDate *oneHunderMS = [NSDate dateWithTimeIntervalSinceNow:0.1];
+		[runloop runMode:NSDefaultRunLoopMode beforeDate:oneHunderMS];
     }
     
     [NSApp endModalSession:session];

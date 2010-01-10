@@ -14,9 +14,13 @@
 @synthesize webViewBox;
 @synthesize webView;
 @synthesize updateItem;
+//@synthesize avoidRunLoop;
 
 - (void)displayReleaseNotes
 {
+	if (webViewFinishedLoading)
+		return;
+	
 	// Set the default font	
 	[webView setPreferencesIdentifier:[SPARKLE_BUNDLE bundleIdentifier]];
 	[[webView preferences] setStandardFontFamily:[[NSFont systemFontOfSize:8] familyName]];
@@ -26,7 +30,7 @@
 	
 	// Stick a nice big spinner in the middle of the web view until the page is loaded.
 	NSRect frame = [webViewBox frame];
-	releaseNotesSpinner = [[[NSProgressIndicator alloc] initWithFrame:NSMakeRect(NSMidX(frame)-16, NSMidY(frame)-16, 32, 32)] autorelease];
+	releaseNotesSpinner = [[NSProgressIndicator alloc] initWithFrame:NSMakeRect(NSMidX(frame)-16, NSMidY(frame)-16, 32, 32)];
 	[releaseNotesSpinner setStyle:NSProgressIndicatorSpinningStyle];
 	[releaseNotesSpinner startAnimation:self];
 	webViewFinishedLoading = NO;
@@ -136,10 +140,16 @@
 	[releaseNotesSpinner stopAnimation:nil];
 	[releaseNotesSpinner removeFromSuperview];
 	
-	[webView stopLoading:self];
-	[webView setFrameLoadDelegate:nil];
-	[webView setPolicyDelegate:nil];
+	//[webView stopLoading:self];
+	//[webView setFrameLoadDelegate:nil];
+	//[webView setPolicyDelegate:nil];
 	[webView removeFromSuperview]; // Otherwise it gets sent Esc presses (why?!) and gets very confused.
+}
+- (void)dealloc
+{
+	[releaseNotesSpinner removeFromSuperview];
+	[releaseNotesSpinner release];
+	[super dealloc];
 }
 
 @end
